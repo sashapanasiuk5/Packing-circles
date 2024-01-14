@@ -4,14 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PackingCircles"
+        xmlns:controls="clr-namespace:PackingCircles.Resources.Controls"
+        xmlns:vm="clr-namespace:PackingCircles.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
+    <Window.DataContext>
+        <vm:MainViewModel></vm:MainViewModel>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="500"></ColumnDefinition>
             <ColumnDefinition Width="300"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Canvas Grid.Column="0"></Canvas>
+        <controls:CirclesPresenter Grid.Column="0" CirclesToShow="{Binding Circles, UpdateSourceTrigger=PropertyChanged}"/>
         <Border Grid.Column="1"
                 Padding="20">
             <StackPanel>
@@ -20,9 +25,15 @@
                     AcceptsReturn="True"
                     VerticalScrollBarVisibility="Visible"
                     Height="200"
+                    Text="{Binding Input}"
                 ></TextBox>
                 
-                <Button Padding="10" Margin="0,15,0,0" FontSize="14">Place Circles</Button>
+                <Button Padding="10" Margin="0,15,0,0"
+                        FontSize="14"
+                        Command="{Binding PlaceCirclesCommand}">Place Circles</Button>
+                <Button Padding="10" Margin="0,15,0,0"
+                        FontSize="14"
+                        Command="{Binding MoveCommand}"> Move</Button>
             </StackPanel>
         </Border>
     </Grid>

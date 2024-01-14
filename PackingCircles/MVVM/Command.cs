@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace PackingCircles.MVVM;
 
-public class Command
+public class Command: ICommand
 {
     private Action<object> _execute;
     private Func<object, bool> _canExecute;
