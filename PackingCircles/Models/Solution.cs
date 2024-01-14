@@ -11,8 +11,10 @@ public class Solution
 
     public Solution(List<Circle> circles)
     {
+
         Circles = new ObservableCollection<Circle>(circles);
         Circles.CollectionChanged += CalculateEstimate;
+        CalculateEstimate(this, null);
     }
 
     private void CalculateEstimate(object sender, EventArgs e)
