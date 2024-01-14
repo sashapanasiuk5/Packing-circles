@@ -9,7 +9,7 @@ namespace PackingCircles.ViewModels;
 public class MainViewModel:ViewModelBase
 {
     private string _input;
-    private ObservableCollection<Circle> _circles;
+    private Solution _solution;
 
     public string Input
     {
@@ -17,30 +17,30 @@ public class MainViewModel:ViewModelBase
         set => Set(ref _input, value);
     }
 
-    public ObservableCollection<Circle> Circles
+    public Solution Solution
     {
-        get => _circles;
-        set => Set(ref _circles, value);
+        get => _solution;
+        set => Set(ref _solution, value);
     }
     public Command PlaceCirclesCommand { get; }
     public Command MoveCommand { get; }
 
     public MainViewModel()
     {
-        Circles = new ObservableCollection<Circle>();
+        Solution = new Solution();
         PlaceCirclesCommand = new Command(PlaceCircles, false);
         MoveCommand = new Command(MoveCircle, false);
     }
 
     private void PlaceCircles(object param)
     {
-        CircleGenerator generator = new CircleGenerator();
+        SolutionGenerator generator = new SolutionGenerator();
         if (_input.Length > 0)
         {
             List<string> radiiString = new List<string>(_input.Split("\n"));
             List<int> radii = new List<int>();
             radiiString.ForEach((el) => radii.Add(Int32.Parse(el)));
-            Circles = new ObservableCollection<Circle>(generator.Generate(radii));
+            Solution = generator.Generate(radii);
         }
     }
 

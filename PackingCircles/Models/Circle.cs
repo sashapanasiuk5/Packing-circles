@@ -20,6 +20,7 @@ public class Circle
         double distance = Math.Sqrt(Math.Pow((circle.Position.X - Position.X), 2) + Math.Pow((circle.Position.Y - Position.Y), 2));
         return distance < circle.Radius + Radius;
     }
+    
 
     public float DistanceToFurthestPoint()
     {

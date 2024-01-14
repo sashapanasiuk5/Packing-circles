@@ -21,4 +21,10 @@ public class Tests
     {
         Assert.AreEqual(55, _solution.Estimate);
     }
+
+    [Test]
+    public void CanAdd_CircleIntersectsWithOthers_False_Expected()
+    {
+        Assert.False(_solution.CanAdd(new Circle(20,-20,0)));
+    }
 }

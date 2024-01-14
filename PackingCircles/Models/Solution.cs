@@ -17,6 +17,14 @@ public class Solution
         CalculateEstimate(this, null);
     }
 
+    public Solution()
+    {
+        Circles = new ObservableCollection<Circle>();
+        Circles.CollectionChanged += CalculateEstimate;
+    }
+
+    public void AddCircle(Circle circle) => Circles.Add(circle);
+
     private void CalculateEstimate(object sender, EventArgs e)
     {
         float maxDistance = 0;
@@ -28,5 +36,15 @@ public class Solution
         }
 
         Estimate = maxDistance;
+    }
+
+    public bool CanAdd(Circle circleToAdd)
+    {
+        foreach (var circle in Circles)
+        {
+            if (circleToAdd.IsIntersects(circle))
+                return false;
+        }
+        return true;
     }
 }
