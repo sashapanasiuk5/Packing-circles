@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Documents;
 
 namespace PackingCircles.Models;
 
 public class SolutionGenerator
 {
-    public Solution Generate(List<int> radii)
+    private List<int> _radii;
+
+    public SolutionGenerator(List<int> radii)
+    {
+        _radii = radii;
+    }
+    public Solution Generate()
     {
         Random random = new Random();
         Solution solution = new Solution();
-        int MaxRadius = radii.Max();
-        solution.AddCircle(new Circle(MaxRadius, 0,0));
-        radii.Remove(MaxRadius);
-        foreach (var radius in radii)
+
+        List<int> tempRadii = new List<int>(_radii);
+        int MaxRadius = tempRadii.Max();
+        solution.AddCircle(new Circle(MaxRadius, random.Next(0, 2*MaxRadius),random.Next(0, 2*MaxRadius)));
+        tempRadii.Remove(MaxRadius);
+        foreach (var radius in tempRadii)
         {
             Circle newCircle = new Circle();
             do
@@ -23,7 +32,7 @@ public class SolutionGenerator
                 float x = (float)((target.Radius + radius) * Math.Cos(angle) + target.Position.X);
                 float y = (float)((target.Radius + radius) * Math.Sin(angle) + target.Position.Y);
                 newCircle = new Circle(radius, x, y);
-            } while (solution.CanAdd(newCircle));
+            } while (!solution.CanAdd(newCircle));
             solution.AddCircle(newCircle);
         }
         return solution;

@@ -7,6 +7,7 @@ namespace PackingCircles.Models;
 public class Solution
 {
     public ObservableCollection<Circle> Circles { get; }
+    public int Mutations { get;  set; }
     public float Estimate { get; private set; }
 
     public Solution(List<Circle> circles)
@@ -37,6 +38,8 @@ public class Solution
 
         Estimate = maxDistance;
     }
+
+    public void IncreaseMutations() => Mutations++;
 
     public bool CanAdd(Circle circleToAdd)
     {

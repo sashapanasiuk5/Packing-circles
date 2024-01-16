@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using PackingCircles.Models;
 using PackingCircles.MVVM;
 
@@ -10,6 +11,7 @@ public class MainViewModel:ViewModelBase
 {
     private string _input;
     private Solution _solution;
+    private CirclePacker _packer;
 
     public string Input
     {
@@ -22,32 +24,26 @@ public class MainViewModel:ViewModelBase
         get => _solution;
         set => Set(ref _solution, value);
     }
-    public Command PlaceCirclesCommand { get; }
-    public Command MoveCommand { get; }
+    public Command SolveCommand { get; }
 
     public MainViewModel()
     {
         Solution = new Solution();
-        PlaceCirclesCommand = new Command(PlaceCircles, false);
-        MoveCommand = new Command(MoveCircle, false);
+        SolveCommand = new Command(Solve, false);
     }
-
-    private void PlaceCircles(object param)
+    private void Solve(object param)
     {
-        SolutionGenerator generator = new SolutionGenerator();
         if (_input.Length > 0)
         {
-            List<string> radiiString = new List<string>(_input.Split("\n"));
+            List<string> radiiString = new List<string>(_input.Split(
+                new string[] { "\r\n", "\r", "\n" },
+                StringSplitOptions.None
+            ));
             List<int> radii = new List<int>();
             radiiString.ForEach((el) => radii.Add(Int32.Parse(el)));
-            Solution = generator.Generate(radii);
+            _packer = new CirclePacker(10, radii, 10, 5);
+            _packer.Solve();
+            Solution = _packer.GetSolution();
         }
-    }
-
-    private void MoveCircle(object param)
-    {
-        CircleAlgorithms algorithms = new CircleAlgorithms();
-
-        //Circles = new ObservableCollection<Circle>(algorithms.MoveFarrest(new List<Circle>(_circles), 10));
     }
 }

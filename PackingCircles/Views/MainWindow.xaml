@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:PackingCircles"
         xmlns:controls="clr-namespace:PackingCircles.Resources.Controls"
         xmlns:vm="clr-namespace:PackingCircles.ViewModels"
+        xmlns:m="clr-namespace:PackingCircles.Models"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
+        Title="PackingCircles" Height="500" Width="800">
     <Window.DataContext>
         <vm:MainViewModel></vm:MainViewModel>
     </Window.DataContext>
@@ -16,7 +17,7 @@
             <ColumnDefinition Width="500"></ColumnDefinition>
             <ColumnDefinition Width="300"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <controls:CirclesPresenter Grid.Column="0" CirclesToShow="{Binding Circles, UpdateSourceTrigger=PropertyChanged}"/>
+        <controls:CirclesPresenter Grid.Column="0" CirclesToShow="{Binding Solution.Circles, UpdateSourceTrigger=PropertyChanged}"/>
         <Border Grid.Column="1"
                 Padding="20">
             <StackPanel>
@@ -24,16 +25,25 @@
                     TextWrapping="Wrap"
                     AcceptsReturn="True"
                     VerticalScrollBarVisibility="Visible"
-                    Height="200"
+                    Height="150"
                     Text="{Binding Input}"
                 ></TextBox>
-                
-                <Button Padding="10" Margin="0,15,0,0"
+                <Button Padding="10" Margin="0,8,0,0"
                         FontSize="14"
-                        Command="{Binding PlaceCirclesCommand}">Place Circles</Button>
-                <Button Padding="10" Margin="0,15,0,0"
-                        FontSize="14"
-                        Command="{Binding MoveCommand}"> Move</Button>
+                        Command="{Binding SolveCommand}"> Solve</Button>
+                <StackPanel VerticalAlignment="Bottom">
+                    <TextBlock Text="{Binding Solution.Estimate, Mode=OneWay}" Foreground="Blue"></TextBlock>
+                    <ListBox ItemsSource="{Binding Solution.Circles}" Height="250">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type m:Circle}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Radius}"></TextBlock>
+                                    <TextBlock Text="{Binding Position}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>

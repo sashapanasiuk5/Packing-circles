@@ -21,11 +21,15 @@ public class RandomValue
         float sum = 0;
         foreach (var circle in solution.Circles)
         {
+            if( (circle.Position.Y == 0) && (circle.Position.X == 0))
+                continue;
             sum += circle.DistanceToFurthestPoint();
         }
 
         foreach (var circle in solution.Circles)
         {
+            if( (circle.Position.Y == 0) && (circle.Position.X == 0))
+                continue;
             Probabilities.Add(circle.DistanceToFurthestPoint() / sum);
         }
     }
@@ -41,7 +45,7 @@ public class RandomValue
             previousValue = value;
         }
 
-        if (Math.Abs(distributionFunction.Last() - 1.0) > 0.0000001)
+        if (Math.Abs(distributionFunction.Last() - 1.0) > 0.00001)
         {
             throw new Exception("Probabilities are incorrect");
         }

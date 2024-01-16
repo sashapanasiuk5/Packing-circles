@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Windows;
 using PackingCircles.ViewModels;
 
 namespace PackingCircles.Models;
@@ -14,30 +16,42 @@ public class CircleAlgorithms
         float newDistance = oldDistance - step;
         float x = (target.Position.X * newDistance)/oldDistance;
         float y = (target.Position.Y * newDistance)/oldDistance;
-        circles.Add(new Circle(target.Radius, x, y));
-        return MoveOthers(circles);
-    }
-    
-    private List<Circle> MoveOthers(List<Circle> circles)
-    {
-        for (int i = 0; i < circles.Count; i++)
+        Circle newCircle = new Circle(target.Radius, x, y);
+        circles.Add(newCircle);
+        HashSet<int> movedIndexes = new HashSet<int>();
+        movedIndexes.Add(circles.Count-1);
+
+        int k = 0;
+        while (movedIndexes.Count > 0)
         {
-            for (int j = 0; j < circles.Count; j++)
+            HashSet<int> newMovedCircles = new HashSet<int>();
+            foreach (var index in movedIndexes)
             {
-                if(i == j)
-                    continue;
-                Circle circle = circles[i];
-                Circle moved = circles[j];
-                if (circle.IsIntersects(moved))
+                for (int i = 0; i < circles.Count; i++)
                 {
-                    float d = (circle.Radius + moved.Radius) - Vector2.Distance(circle.Position, moved.Position);
-                    Vector2 vector = Vector2.Subtract(circle.Position, moved.Position);
-                    vector = Vector2.Normalize(vector);
-                    vector = Vector2.Multiply(d, vector);
-                    circles[i] = new Circle(circle.Radius, circle.Position.X + vector.X, circle.Position.Y + vector.Y);
+                    Circle circle = circles[i];
+                    if(i == index)
+                        continue;
+                    if (circle.IsIntersects(circles[index]))
+                    {
+                        Circle movedCircle = circles[index];
+                        float d = (circle.Radius + movedCircle.Radius) - Vector2.Distance(circle.Position, movedCircle.Position);
+                        Vector2 vector = Vector2.Subtract(circle.Position, movedCircle.Position);
+                        vector = Vector2.Normalize(vector);
+                        vector = Vector2.Multiply(d, vector);
+                        circles[i] = new Circle(circle.Radius, circle.Position.X + vector.X, circle.Position.Y + vector.Y);
+                        newMovedCircles.Add(i);
+                        if (circles[i].Position.Length() > 500)
+                        {
+                           break;
+                        }
+                    }
                 }
             }
+            movedIndexes = newMovedCircles;
+            k++;
         }
+
         return circles;
     }
 }
